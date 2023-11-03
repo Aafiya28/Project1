@@ -1,8 +1,10 @@
 let todoInput = document.querySelector('.input');
 let addTodoBtn = document.querySelector('.button');
-let showTodo = document.querySelector('.todo-container')
+let showTodo = document.querySelector('.todos-container')
 let todo;
-let todoList = [];
+
+let localData = JSON.parse(localStorage.getItem("todo"));
+let todoList =localData || [];
 
 /**Creating function to get the unique id */
 function uuid() {
@@ -21,23 +23,27 @@ addTodoBtn.addEventListener('click', (e) => {
         todoList.push({id:uuid(), todo, isCompleted : false})
     }
     renderTodoList(todoList);
+    localStorage.setItem("todo", JSON.stringify(todoList));
     todoInput.value = "";
 })
 
 showTodo.addEventListener('click', (e) => {
     let key = e.target.dataset.key;
-    let delTodoKey = e.target.dataset.key;
+    let delTodokey = e.target.dataset.todokey;
     todoList = todoList.map(todo => todo.id === key ? {...todo, isCompleted: !todo.isCompleted} : todo);
-    todoList = todoList.filter(todo => todo.id !== delTodoKey);
+    todoList = todoList.filter(todo => todo.id !== delTodokey);
+    localStorage.setItem("todo", JSON.stringify(todoList));
     renderTodoList(todoList);
-    console.log(todoList);
 })
 
 function renderTodoList(todoList){
-    console.log(todoList);
-    showTodo.innerHTML = todoList.map(({id, todo, isCompleted}) =>`<div class="relative"><input class="t-checkbox t-pointer" id="item-${id}" type="checkbox" data-key=${id} ${isCompleted ? "checked" : ""}> <label for="item-${id}" class="todo todo-text t-pointer ${isCompleted ? "checked-todo" : ""}" data-key=${id}>${todo}</label><button class="absolute right-0 button cursor"><span data-todokey=${id} class=" del-btn material-icons-outlined">
-    delete
-    </span></button></div>`)
+    showTodo.innerHTML = todoList.map(({id, todo, isCompleted}) =>
+    `<div class="todo relative">
+    <input class="t-checkbox t-pointer" id="item-${id}" type="checkbox" data-key=${id} ${isCompleted ? "checked": ""} >
+    <label for="item-${id}" class="todo todo-text t-pointer ${isCompleted ? "checked-todo": ""}" data-key=${id}> ${todo} </label> <button class="absolute right-0 button cursor">
+        <span data-todokey=${id} class=" del-btn material-icons-outlined"> delete </span>
+    </button>
+    </div>`);
 }
 
 renderTodoList(todoList)

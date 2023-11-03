@@ -30,7 +30,6 @@ body {
     border: none;
     width: 25vw;
     margin-bottom: 0.5rem;
-
 }
 
 .input:focus {
@@ -52,7 +51,7 @@ body {
     font-size: 1.5rem;
 }
 
-.todo-container {
+.todos-container {
     height: 70vh;
     overflow-y: auto;
 }
